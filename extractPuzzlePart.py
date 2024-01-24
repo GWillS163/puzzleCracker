@@ -28,7 +28,7 @@ def segment_image(image_path, rect):
     # cv2.destroyAllWindows()
 
     # 保存结果
-    cv2.imwrite('processed.JPG', image)
+    cv2.imwrite('processed.PNG', image)
 
 # 示例用法
 # segment_image('puzzleCases/raw/corner_part.JPG', (0, 0, 770, 800))

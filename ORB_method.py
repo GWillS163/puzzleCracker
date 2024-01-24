@@ -71,4 +71,7 @@ def find_subimage(main_image_path, sub_image_path):
 # find_subimage("puzzleCases/full_puzzle.jpeg", "puzzleCases/full_puzzle_mojipart.jpeg")
 # find_subimage("puzzleCases/full_puzzle.jpeg", "puzzleCases/full_puzzle_mojipart2.jpeg")
 # find_subimage("puzzleCases/raw/corner.JPG", "puzzleCases/raw/corner_part.JPG")
-find_subimage("puzzleCases/raw/corner.JPG", "puzzleCases/raw/corner_part_noise.JPG")
+# find_subimage("puzzleCases/raw/corner.JPG", "puzzleCases/raw/corner_part_noise.JPG")
+
+
+find_subimage("puzzleCases/raw/corner.JPG", "processed.JPG")
