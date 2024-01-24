@@ -1,7 +1,12 @@
-import cv2
+import cv2, os
 import numpy as np
 
 def find_subimage_akaze(main_image_path, sub_image_path):
+    if not os.path.isfile(main_image_path):
+        raise FileNotFoundError(f"No such file: '{main_image_path}'")
+    if not os.path.isfile(sub_image_path):
+        raise FileNotFoundError(f"No such file: '{sub_image_path}'")
+
     # 读取大拼图和小拼图
     main_image = cv2.imread(main_image_path)
     sub_image = cv2.imread(sub_image_path)
@@ -60,9 +65,13 @@ def find_subimage_akaze(main_image_path, sub_image_path):
 
 # find_subimage_akaze("testCases/floor/medium_angle.JPG", "testCases/floor/up.JPG")
 # find_subimage_akaze("testCases/floor/medium_angle.JPG", "testCases/floor/slight_angle.JPG")
+# find_subimage_akaze("puzzleCases/fully/full_puzzle3_corner_part.jpg", "puzzleCases/raw/corner_part.JPG")  # _noise
+        
 
 
 # success
 # find_subimage_akaze("testCases/floor/slight_angle.JPG", "testCases/floor/up.JPG")
-# find_subimage_akaze("puzzleCases/fully/full_puzzle3_corner_part.jpg", "puzzleCases/raw/corner_part.JPG")  # _noise
+# find_subimage_akaze("puzzleCases/raw/full_cornerHD.JPG", "puzzleCases/raw/corner_part.JPG")  # _noise
+# find_subimage_akaze("puzzleCases/raw/full_cornerHD.JPG", "processed.JPG") #"puzzleCases/raw/corner_part.JPG")  # _noise
+find_subimage_akaze("puzzleCases/raw/full_cornerHD.JPG", "processed2.JPG") #"puzzleCases/raw/corner_part.JPG")  # _noise
 
