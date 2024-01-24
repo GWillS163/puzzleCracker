@@ -1,15 +1,15 @@
 import cv2
 import numpy as np
 
-def find_subimage(main_image_path, sub_image_path):
+def find_subimage_akaze(main_image_path, sub_image_path):
     # 读取大拼图和小拼图
     main_image = cv2.imread(main_image_path)
     sub_image = cv2.imread(sub_image_path)
 
-    # 使用ORB检测特征点和计算描述符
-    orb = cv2.ORB_create()
-    kp1, des1 = orb.detectAndCompute(sub_image, None)
-    kp2, des2 = orb.detectAndCompute(main_image, None)
+    # 使用AKAZE检测特征点和计算描述符
+    akaze = cv2.AKAZE_create()
+    kp1, des1 = akaze.detectAndCompute(sub_image, None)
+    kp2, des2 = akaze.detectAndCompute(main_image, None)
 
     # 使用FLANN匹配器进行特征点匹配
     index_params = dict(algorithm=6, table_number=6, key_size=12, multi_probe_level=1)
@@ -53,22 +53,16 @@ def find_subimage(main_image_path, sub_image_path):
         print("Not enough matches found.")
 
 # 示例用法
-# find_subimage('testCases/case2_workprofile/main_image.jpg',
-#                    'testCases/case2_workprofile/sub_image2.jpg')
 # failed
-# find_subimage("puzzleCases/full_puzzle.jpeg", "puzzleCases/failed/raw1.jpg")
-# find_subimage("puzzleCases/full_puzzle.jpeg", "puzzleCases/failed/raw1_rotate.jpg")
-# find_subimage("puzzleCases/full_puzzle.jpeg", "puzzleCases/failed/part1.jpg")
-# find_subimage("puzzleCases/full_puzzle.jpeg", "puzzleCases/failed/part2_big.jpg")
-# find_subimage("puzzleCases/full_puzzle.jpeg", "puzzleCases/part2_bigger.jpg")
-# find_subimage("puzzleCases/full_puzzle.jpeg", "puzzleCases/part2_Larger.jpg")
-# find_subimage("puzzleCases/full_puzzle.jpeg", "puzzleCases/full_puzzle_mojipart.png")
-# find_subimage("puzzleCases/full_puzzle.jpeg", "puzzleCases/full_puzzle_towerpart.jpeg")
-# find_subimage("puzzleCases/full_puzzle.jpeg", "puzzleCases/failed/full_puzzle_moonpart.jpeg")
+# find_subimage_akaze('testCases/case2_workprofile/main_image.jpg',
+#                    'testCases/case2_workprofile/sub_image2.jpg')
+# find_subimage_akaze("puzzleCases/raw/corner.JPG", "puzzleCases/raw/corner_part_noise.JPG")
+
+# find_subimage_akaze("testCases/floor/medium_angle.JPG", "testCases/floor/up.JPG")
+# find_subimage_akaze("testCases/floor/medium_angle.JPG", "testCases/floor/slight_angle.JPG")
+
 
 # success
-# find_subimage("puzzleCases/full_puzzle.jpeg", "puzzleCases/full_puzzle_mojipart.jpg")
-# find_subimage("puzzleCases/full_puzzle.jpeg", "puzzleCases/full_puzzle_mojipart.jpeg")
-# find_subimage("puzzleCases/full_puzzle.jpeg", "puzzleCases/full_puzzle_mojipart2.jpeg")
-# find_subimage("puzzleCases/raw/corner.JPG", "puzzleCases/raw/corner_part.JPG")
-find_subimage("puzzleCases/raw/corner.JPG", "puzzleCases/raw/corner_part_noise.JPG")
+# find_subimage_akaze("testCases/floor/slight_angle.JPG", "testCases/floor/up.JPG")
+# find_subimage_akaze("puzzleCases/fully/full_puzzle3_corner_part.jpg", "puzzleCases/raw/corner_part.JPG")  # _noise
+

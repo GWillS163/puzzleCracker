@@ -18,19 +18,19 @@ def find_subimage_surf(main_image_path, sub_image_path):
     gray_main = cv2.cvtColor(main_image, cv2.COLOR_BGR2GRAY)
     gray_sub = cv2.cvtColor(sub_image, cv2.COLOR_BGR2GRAY)
 
-    # Initialize ORB detector
-    orb = cv2.ORB_create(nfeatures=10000)
+    # 初始化SURF检测器
+    surf = cv2.xfeatures2d.SURF_create()
+    # このエラーは、OpenCVのSURFアルゴリズムが特許で保護されているため、デフォルトのOpenCVビルドでは使用できないことを示しています。SURFを使用するには、OpenCVをOPENCV_ENABLE_NONFREEオプションを有効にしてビルドし直す必要があります。
 
-    # Find keypoints and descriptors
-    kp1, des1 = orb.detectAndCompute(gray_sub, None)
-    kp2, des2 = orb.detectAndCompute(gray_main, None)
+    # 寻找关键点和描述符
+    kp1, des1 = surf.detectAndCompute(gray_sub, None)
+    kp2, des2 = surf.detectAndCompute(gray_main, None)
 
-    # Use BFMatcher instead of FLANN for ORB
-    bf = cv2.BFMatcher(cv2.NORM_HAMMING, crossCheck=True)
-    matches = bf.match(des1, des2)
-
-    # Sort matches by distance (the lower the better)
-    matches = sorted(matches, key=lambda x: x.distance)
+    # 使用FLANN匹配器进行特征点匹配
+    index_params = dict(algorithm=6, table_number=6, key_size=12, multi_probe_level=1)
+    search_params = dict(checks=50)
+    flann = cv2.FlannBasedMatcher(index_params, search_params)
+    matches = flann.knnMatch(des1, des2, k=2)
 
     # 根据Lowe's ratio测试获取良好的匹配点
     good_matches = []
@@ -64,10 +64,13 @@ def find_subimage_surf(main_image_path, sub_image_path):
         print("Not enough matches found.")
 
 # 示例用法
+# failed
 # find_subimage_surf('testCases/case2_workprofile/main_image.jpg',
 #                    'testCases/case2_workprofile/sub_image2.jpg')
+# find_subimage_surf("puzzleCases/full_puzzle.jpeg", "puzzleCases/full_puzzle_mojipart2.jpeg")
+# find_subimage_surf("puzzleCases/full_puzzle.jpeg", "puzzleCases/full_puzzle_mojipart2.jpeg")
+find_subimage_surf("puzzleCases/raw/corner.JPG", "puzzleCases/raw/corner_part_noise.JPG")
 
-find_subimage_surf("puzzleCases/full_puzzle.jpeg", "puzzleCases/full_puzzle_mojipart2.jpeg")
 
 # find_subimage_surf("puzzleCases/full_puzzle.jpeg", "puzzleCases/raw1_rotate.jpg")
 # find_subimage_surf("puzzleCases/full_puzzle.jpeg", "puzzleCases/full_puzzle_towerpart.jpg")
