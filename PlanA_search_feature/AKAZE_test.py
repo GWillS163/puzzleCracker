@@ -24,8 +24,8 @@ class Puzzle(unittest.TestCase):
 
     def test_raw(self):
         # find_subimage_akaze("../puzzleCases/raw/full_cornerHD.JPG", "center_blue_multi.JPG")
-        find_subimage_akaze(target_image_r,
-                            "../puzzleCases/raw/single_pieces (1).JPG", )
+        find_subimage_akaze(target_image,
+                            "../puzzleCases/raw/building_windows (1).JPG", )
         self.assertEqual(True, True)
 
 # success
