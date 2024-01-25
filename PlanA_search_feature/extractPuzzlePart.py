@@ -1,7 +1,7 @@
 import cv2
 import numpy as np
 
-def segment_image(image_path, rect):
+def segment_image(image_path):
     # 读取图像
     image = cv2.imread(image_path)
     if image is None:
@@ -9,6 +9,9 @@ def segment_image(image_path, rect):
         return
     
     # resize image to 800px width
+    w, h = image.shape[:2]
+    rect = (0, 0, w, h)
+
     new_width = 800
     scale = new_width / image.shape[1]
     new_height = int(image.shape[0] * scale)
@@ -22,27 +25,26 @@ def segment_image(image_path, rect):
 
 
     # method 1: 使用GrabCut算法
-    # cv2.grabCut(image, mask, rect, bgdModel, fgdModel, 5, cv2.GC_INIT_WITH_RECT)
+    cv2.grabCut(image, mask, rect, bgdModel, fgdModel, 6, cv2.GC_INIT_WITH_RECT)
  
     # method 2: 使用 颜色阈值分割算法， 保留 中心区域的数据
     # convert to hsv
-    hsv = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
-    # define range of blue color in HSV
-    lower_blue = np.array([0, 0, 0])
-    upper_blue = np.array([180, 255, 120])
-    # Threshold the HSV image to get only blue colors
-    mask = cv2.inRange(hsv, lower_blue, upper_blue)
-    # keep mask
-    mask = cv2.bitwise_not(mask)
-    # Bitwise-AND mask and original image
-    image = cv2.bitwise_and(image, image, mask=mask)
+    # hsv = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
+    # # define range of blue color in HSV
+    # lower_blue = np.array([0, 0, 0])
+    # upper_blue = np.array([180, 255, 120])
+    # # Threshold the HSV image to get only blue colors
+    # mask = cv2.inRange(hsv, lower_blue, upper_blue)
+    # # keep mask
+    # mask = cv2.bitwise_not(mask)
+    # # Bitwise-AND mask and original image
+    # image = cv2.bitwise_and(image, image, mask=mask)
 
 
 
     # 显示mask图像
-    cv2.imshow('mask', mask)
-    cv2.waitKey(0)
-
+    # cv2.imshow('mask', mask)
+    # cv2.waitKey(0)
 
     # 创建一个新的mask图像，将确定或很可能的前景区域标记为255，其余区域标记为0
     new_mask = np.where((mask == 2) | (mask == 0), 0, 1).astype('uint8')
@@ -56,10 +58,11 @@ def segment_image(image_path, rect):
     # cv2.destroyAllWindows()
 
     # 保存结果
-    cv2.imwrite('cleaned_img/center_blue_multi.JPG', image)
+    get_file_name = lambda path: path.split('/')[-1].split('.')[0] + '_processed.JPG'
+    cv2.imwrite('temp/' + get_file_name, image)
 
 # 示例用法
 # segment_image('puzzleCases/raw/corner_part.JPG', (0, 0, 770, 800))
 # segment_image('puzzleCases/raw/corner_part_noise.JPG', (0, 0, 770, 800))
 # segment_image('puzzleCases/raw/pieces2.JPG', (670, 800, 2700, 3500))
-segment_image('../puzzleCases/raw/pieces2_reshoot.JPG', (0, 0, 1907, 2734))
+segment_image('../puzzleCases/raw/single_pieces (1).JPG')

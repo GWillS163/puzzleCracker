@@ -42,7 +42,7 @@ def find_subimage_akaze(main_image_path, sub_image_path, accuracy=0.78):
         dst = cv2.perspectiveTransform(pts, M)
 
         # 整体添加灰色蒙版
-        main_image = cv2.addWeighted(main_image, 0.5, np.zeros(main_image.shape, main_image.dtype), 0.3, 0)
+        main_image = cv2.addWeighted(main_image, 0.7, np.zeros(main_image.shape, main_image.dtype), 0.5, 0)
 
         # 在大拼图上绘制小拼图的边框
         main_image = cv2.polylines(main_image, [np.int32(dst)], True, (0, 255, 0), 5, cv2.LINE_AA)
@@ -52,7 +52,7 @@ def find_subimage_akaze(main_image_path, sub_image_path, accuracy=0.78):
 
         # 显示结果
         max_height = 1000
-# show image with fix width
+        # show image with fix width
         scale = max_height / main_image.shape[0]
         new_width = int(main_image.shape[1] * scale)
         main_image = cv2.resize(main_image, (new_width, max_height))
