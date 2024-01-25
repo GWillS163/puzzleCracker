@@ -1,7 +1,7 @@
 import cv2, os
 import numpy as np
 
-def find_subimage_akaze(main_image_path, sub_image_path):
+def find_subimage_akaze(main_image_path, sub_image_path, accuracy=0.78):
     if not os.path.isfile(main_image_path):
         raise FileNotFoundError(f"No such file: '{main_image_path}'")
     if not os.path.isfile(sub_image_path):
@@ -28,7 +28,7 @@ def find_subimage_akaze(main_image_path, sub_image_path):
         if len(mn) != 2:
             continue
         m,n = mn
-        if m.distance < 0.7 * n.distance:
+        if m.distance < accuracy * n.distance:  # 这里是用来调整的参数
             good_matches.append(m)
 
     if len(good_matches) > 10:
@@ -41,15 +41,21 @@ def find_subimage_akaze(main_image_path, sub_image_path):
         pts = np.float32([[0, 0], [0, h - 1], [w - 1, h - 1], [w - 1, 0]]).reshape(-1, 1, 2)
         dst = cv2.perspectiveTransform(pts, M)
 
+        # 整体添加灰色蒙版
+        main_image = cv2.addWeighted(main_image, 0.5, np.zeros(main_image.shape, main_image.dtype), 0.3, 0)
+
         # 在大拼图上绘制小拼图的边框
-        main_image = cv2.polylines(main_image, [np.int32(dst)], True, (0, 255, 0), 3, cv2.LINE_AA)
+        main_image = cv2.polylines(main_image, [np.int32(dst)], True, (0, 255, 0), 5, cv2.LINE_AA)
+
+        # 绘制所有匹配点
+        main_image = cv2.drawMatches(sub_image, kp1, main_image, kp2, good_matches, None, flags=2)
 
         # 显示结果
-        widows_width = 800
-        # show image with fix width
-        scale = widows_width / main_image.shape[1]
-        new_height = int(main_image.shape[0] * scale)
-        main_image = cv2.resize(main_image, (widows_width, new_height))
+        max_height = 1000
+# show image with fix width
+        scale = max_height / main_image.shape[0]
+        new_width = int(main_image.shape[1] * scale)
+        main_image = cv2.resize(main_image, (new_width, max_height))
 
         cv2.imshow('Result', main_image)
         cv2.waitKey(0)
@@ -67,11 +73,4 @@ def find_subimage_akaze(main_image_path, sub_image_path):
 # find_subimage_akaze("testCases/floor/medium_angle.JPG", "testCases/floor/slight_angle.JPG")
 # find_subimage_akaze("puzzleCases/fully/full_puzzle3_corner_part.jpg", "puzzleCases/raw/corner_part.JPG")  # _noise
         
-
-
-# success
-# find_subimage_akaze("testCases/floor/slight_angle.JPG", "testCases/floor/up.JPG")
-# find_subimage_akaze("puzzleCases/raw/full_cornerHD.JPG", "puzzleCases/raw/corner_part.JPG")  # _noise
-# find_subimage_akaze("puzzleCases/raw/full_cornerHD.JPG", "processed.JPG") #"puzzleCases/raw/corner_part.JPG")  # _noise
-find_subimage_akaze("puzzleCases/raw/full_cornerHD.JPG", "processed2.JPG") #"puzzleCases/raw/corner_part.JPG")  # _noise
 
