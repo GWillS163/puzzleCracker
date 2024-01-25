@@ -69,7 +69,7 @@ def find_subimage_surf(main_image_path, sub_image_path):
 #                    'testCases/case2_workprofile/sub_image2.jpg')
 # find_subimage_surf("puzzleCases/full_puzzle.jpeg", "puzzleCases/full_puzzle_mojipart2.jpeg")
 # find_subimage_surf("puzzleCases/full_puzzle.jpeg", "puzzleCases/full_puzzle_mojipart2.jpeg")
-find_subimage_surf("puzzleCases/raw/corner.JPG", "puzzleCases/raw/corner_part_noise.JPG")
+find_subimage_surf("../puzzleCases/raw/corner.JPG", "puzzleCases/raw/corner_part_noise.JPG")
 
 
 # find_subimage_surf("puzzleCases/full_puzzle.jpeg", "puzzleCases/raw1_rotate.jpg")

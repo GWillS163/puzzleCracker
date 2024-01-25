@@ -77,7 +77,7 @@ def masaico_full(image_path=r'puzzleCases\fully\full_puzzle3.jpg'):
 
 def user_piece_color(image_path="testCases/corner_test.JPG"):
     # 和用户的原图进行比较
-    # user_image = cv2.imread("processed.JPG")
+    # user_image = cv2.imread("corner.JPG")
     user_image = cv2.imread(image_path)
     # 去掉rgb = 0,0,0 的部分，计算平均颜色
     # Create a mask for black pixels

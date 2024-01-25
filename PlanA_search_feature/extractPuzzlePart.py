@@ -56,10 +56,10 @@ def segment_image(image_path, rect):
     # cv2.destroyAllWindows()
 
     # 保存结果
-    cv2.imwrite('processed2.JPG', image)
+    cv2.imwrite('cleaned_img/center_blue_multi.JPG', image)
 
 # 示例用法
 # segment_image('puzzleCases/raw/corner_part.JPG', (0, 0, 770, 800))
 # segment_image('puzzleCases/raw/corner_part_noise.JPG', (0, 0, 770, 800))
 # segment_image('puzzleCases/raw/pieces2.JPG', (670, 800, 2700, 3500))
-segment_image('puzzleCases/raw/pieces2_reshoot.JPG', (0, 0, 1907, 2734))
+segment_image('../puzzleCases/raw/pieces2_reshoot.JPG', (0, 0, 1907, 2734))
