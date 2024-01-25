@@ -9,9 +9,6 @@ def segment_image(image_path):
         return
     
     # resize image to 800px width
-    w, h = image.shape[:2]
-    rect = (0, 0, w, h)
-
     new_width = 800
     scale = new_width / image.shape[1]
     new_height = int(image.shape[0] * scale)
