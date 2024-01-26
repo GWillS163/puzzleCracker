@@ -45,16 +45,16 @@ class Floor(unittest.TestCase):
 class Day5(unittest.TestCase):
     def test_day5(self):
         target = "../puzzleCases/pieces2/0126 (5).JPG"
-        res = find_subimage_akaze(target_image, "../puzzleCases/pieces2/0126 (6).JPG")
-        res = find_subimage_akaze(target_image, "../puzzleCases/pieces2/0126 (7).JPG")
-        res = find_subimage_akaze(target_image, "../puzzleCases/pieces2/0126 (8).JPG")
+        # res = find_subimage_akaze(target_image, "../puzzleCases/pieces2/0126 (6).JPG")
+        # res = find_subimage_akaze(target_image, "../puzzleCases/pieces2/0126 (7).JPG")
+        # res = find_subimage_akaze(target_image, "../puzzleCases/pieces2/0126 (8).JPG")
         res = find_subimage_akaze(target_image, "../puzzleCases/pieces2/0126 (9).JPG")
 
         # if res is False:
         #     find_subimage_akaze(target_image_r, target)
 
-
         self.assertEqual(True, True)
+
 
 if __name__ == '__main__':
     unittest.main()
