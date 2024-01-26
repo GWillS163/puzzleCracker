@@ -2,6 +2,27 @@ import cv2, os
 import numpy as np
 
 
+def draw_debug_matches(main_image, sub_image, kp1, kp2, good_matches):
+    def draw_point_text(image, x, y):
+        color = tuple([int(x) for x in np.random.randint(0, 255, 3)])
+        # 随机在x,y坐标上加减10，防止文字重叠
+        new_x = x + np.random.randint(-200, 200)
+        new_y = y + np.random.randint(-200, 200)
+        # 文字增加边框
+        cv2.putText(image, f"{x:.1f},{y:.1f}", (int(new_x), int(new_y)), cv2.FONT_HERSHEY_DUPLEX, 0.8, (128, 128, 128), 3)
+        cv2.putText(image, f"{x:.1f},{y:.1f}", (int(new_x), int(new_y)), cv2.FONT_HERSHEY_DUPLEX, 0.8, color, 2)
+        cv2.circle(image, (int(x), int(y)), 10, color, 2)
+
+    # 在每一个匹配点上 注明坐标文字, 并且用绿色的圆圈标记，方便观察
+    for m in good_matches:
+        x, y = kp2[m.trainIdx].pt
+        draw_point_text(main_image, x, y)
+
+        x, y = kp1[m.queryIdx].pt
+        draw_point_text(sub_image, x, y)
+
+    return main_image, sub_image
+
 def draw_matches(main_image, sub_image, kp1, kp2, good_matches):
     src_pts = np.float32([kp1[m.queryIdx].pt for m in good_matches]).reshape(-1, 1, 2)
     dst_pts = np.float32([kp2[m.trainIdx].pt for m in good_matches]).reshape(-1, 1, 2)
@@ -18,14 +39,11 @@ def draw_matches(main_image, sub_image, kp1, kp2, good_matches):
     # 在大拼图上绘制小拼图的边框
     main_image = cv2.polylines(main_image, [np.int32(dst)], True, (0, 255, 0), 5, cv2.LINE_AA)
 
+    # debugger mode
+    main_image, sub_image = draw_debug_matches(main_image, sub_image, kp1, kp2, good_matches)
+
     # 绘制所有匹配点
     main_image = cv2.drawMatches(sub_image, kp1, main_image, kp2, good_matches, None, flags=2)
-
-    # show sub image with fix width
-    max_height = 800
-    scale = max_height / main_image.shape[0]
-    new_width = int(main_image.shape[1] * scale)
-    main_image = cv2.resize(main_image, (new_width, max_height))
 
     return main_image
 
@@ -59,6 +77,7 @@ def find_subimage_core(main_image, sub_image_path, accuracy=0.78):
     if len(good_matches) <= 10:
         print("Not enough matches found.")
         return False
+
     return [sub_image, kp1, kp2, good_matches]
 
 
@@ -98,9 +117,9 @@ def find_subimage_akaze(main_image_path, sub_image_path, accuracy=0.78):
     image = cv2.resize(image, (new_width, max_height))
 
     # 显示结果
-    cv2.imshow('Result', image)
-    cv2.waitKey(0)
-    cv2.destroyAllWindows()
+    # cv2.imshow('Result', image)
+    # cv2.waitKey(0)
+    # cv2.destroyAllWindows()
     return True
 
 
