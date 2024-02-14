@@ -86,7 +86,7 @@ def read_image(path):
         raise Exception(f"File {path} not found.")
     return cv2.imread(path)
 
-def find_subimage_akaze(main_image_path, sub_image_path, accuracy=0.78):
+def find_subimage_akaze(main_image_path, sub_image_path, save_folder, accuracy=0.78):
     main_image = read_image(main_image_path)
     # 查找单个小拼图
     # sub_image_paths = [sub_image_path, "cleaned_img/corner.JPG"]
@@ -105,22 +105,22 @@ def find_subimage_akaze(main_image_path, sub_image_path, accuracy=0.78):
     # image = draw_matches_multi(main_image, datas)
     image = draw_matches(main_image, result[0], result[1], result[2], result[3])
 
-    # 保存结果
-    get_file_name = lambda path: path.split('/')[-1].split('.')[0] + '_processed.JPG'
-    # cv2.imwrite('temp/' + get_file_name(sub_image_path), image)
-    cv2.imwrite(r'D:\Project\RuoYi-Vue3\src\assets\images/' + "output.jpg", image)
 
-    # resize
-    max_height = 800
-    scale = max_height / image.shape[0]
-    new_width = int(image.shape[1] * scale)
-    image = cv2.resize(image, (new_width, max_height))
-
-    # 显示结果
+    # 显示结果 resize
+    # max_height = 800
+    # scale = max_height / image.shape[0]
+    # new_width = int(image.shape[1] * scale)
+    # image = cv2.resize(image, (new_width, max_height)) 
     # cv2.imshow('Result', image)
     # cv2.waitKey(0)
     # cv2.destroyAllWindows()
-    return True
+
+    get_file_name = lambda path: path.split('/')[-1].split('.')[0] + '_processed.JPG'
+    save_path =  os.path.join(save_folder, get_file_name(sub_image_path))
+    # 保存结果
+    # cv2.imwrite('temp/' + get_file_name(sub_image_path), image)
+    cv2.imwrite(save_path, image)
+    return save_path
 
 
 if __name__ == '__main__':
@@ -131,7 +131,11 @@ if __name__ == '__main__':
         exit(1)
     main_image_path = sys.argv[1]
     sub_image_path = sys.argv[2]
-    find_subimage_akaze(main_image_path, sub_image_path)
+    save_folder = sys.argv[3]
+    accuracy = float(sys.argv[4])
 
-    print("Done")
+    result_path = find_subimage_akaze(main_image_path, sub_image_path, save_folder, accuracy)
+    print(result_path)
+
+    # print("Done")
     # TODO make it  return Green frame, start-end lines.
