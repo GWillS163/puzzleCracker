@@ -9,8 +9,8 @@ def draw_debug_matches(main_image, sub_image, kp1, kp2, good_matches):
         new_x = x + np.random.randint(-200, 200)
         new_y = y + np.random.randint(-200, 200)
         # 文字增加边框
-        cv2.putText(image, f"{x:.1f},{y:.1f}", (int(new_x), int(new_y)), cv2.FONT_HERSHEY_DUPLEX, 0.8, (128, 128, 128), 3)
-        cv2.putText(image, f"{x:.1f},{y:.1f}", (int(new_x), int(new_y)), cv2.FONT_HERSHEY_DUPLEX, 0.8, color, 2)
+        # cv2.putText(image, f"{x:.1f},{y:.1f}", (int(new_x), int(new_y)), cv2.FONT_HERSHEY_DUPLEX, 0.8, (128, 128, 128), 3)
+        # cv2.putText(image, f"{x:.1f},{y:.1f}", (int(new_x), int(new_y)), cv2.FONT_HERSHEY_DUPLEX, 0.8, color, 2)
         cv2.circle(image, (int(x), int(y)), 10, color, 2)
 
     # 在每一个匹配点上 注明坐标文字, 并且用绿色的圆圈标记，方便观察
@@ -36,14 +36,16 @@ def draw_matches(main_image, sub_image, kp1, kp2, good_matches):
     # 整体添加灰色蒙版
     main_image = cv2.addWeighted(main_image, 0.7, np.zeros(main_image.shape, main_image.dtype), 0.5, 0)
 
-    # 在大拼图上绘制小拼图的边框
+    # 在大拼图上绘制小拼图的绿色线条边框
     main_image = cv2.polylines(main_image, [np.int32(dst)], True, (0, 255, 0), 5, cv2.LINE_AA)
 
     # debugger mode
-    # main_image, sub_image = draw_debug_matches(main_image, sub_image, kp1, kp2, good_matches)
+    main_image, sub_image = draw_debug_matches(main_image, sub_image, kp1, kp2, good_matches)
 
-    # 绘制所有匹配点
+    # 绘制所有匹配点, 并且用明显颜色标记出来大拼图上的匹配点
+    # main_image = cv2.drawMatches(sub_image, kp1, main_image, kp2, good_matches, None, flags=cv2.DrawMatchesFlags_NOT_DRAW_SINGLE_POINTS)
     main_image = cv2.drawMatches(sub_image, kp1, main_image, kp2, good_matches, None, flags=2)
+
 
     return main_image
 
